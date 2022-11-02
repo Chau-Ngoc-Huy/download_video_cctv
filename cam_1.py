@@ -54,7 +54,7 @@ def collect_face_images(cam_name):
                 number_image += 1
                 frame_number -= 1
             else:
-                print("don't have any face on image")
+                print("don't have any face on image", frame_number)
 
             # draw_img = draw_boxes(frame, boxes)
 
