@@ -1,7 +1,7 @@
 activate:
 	source env/bin/activate
 
-install: activate
+install: 
 	pip install -r requirements.txt
 
 run:
