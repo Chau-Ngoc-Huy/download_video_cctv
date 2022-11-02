@@ -7,7 +7,7 @@ from facenet_pytorch import MTCNN
 from dotenv import load_dotenv
 import dotenv
 
-os.environ['OPENCV_FFMPEG_CAPTURE_OPTIONS'] = 'rtsp_transport;udp'
+# os.environ['OPENCV_FFMPEG_CAPTURE_OPTIONS'] = 'rtsp_transport;udp'
 
 def init_detecter():
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')

@@ -1,11 +1,8 @@
-activate:
-	source env/bin/activate
-
 install: 
 	pip install -r requirements.txt
 
 run:
-	python3.10 main.py
+	python3 main.py
 
 push_git:
 	git add .
