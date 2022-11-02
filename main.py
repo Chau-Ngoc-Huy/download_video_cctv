@@ -43,19 +43,22 @@ def collect_face_images(cam_name):
     if not cap.isOpened():
         print('Cannot open RTSP stream')
         exit(-1)
+    frame_number = 0
 
     while True:
         _, frame = cap.read()
-        boxes, _ = detecter.detect(frame)
-        if (type(boxes) != type(None)):
-            cv2.imwrite('./data/{}/{}.png'.format(cam_name, str(number_image)), frame)
-            number_image += 1
-        else:
-            print("don't have any box to draw")
+        if frame_number % 30 == 0:
+            boxes, _ = detecter.detect(frame)
+            if (type(boxes) != type(None)):
+                cv2.imwrite('./data/{}/{}.png'.format(cam_name, str(number_image)), frame)
+                number_image += 1
+            else:
+                print("don't have any box to draw")
 
             # draw_img = draw_boxes(frame, boxes)
 
         # cv2.imshow('RTSP stream', draw_img)
+        frame += 1
         if cv2.waitKey(1) == 27:
             break
     
@@ -73,9 +76,9 @@ def detect_face(image):
 
 def main():
 
-    # collect_face_images("cam_1")
-    img = cv2.imread("cam_1_background.png")
-    detect_face(img)
+    collect_face_images("cam_2")
+    # img = cv2.imread("cam_1_background.png")
+    # detect_face(img)
     
 if __name__ == "__main__":
     main()
