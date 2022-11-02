@@ -47,9 +47,11 @@ def collect_face_images(cam_name):
     while True:
         _, frame = cap.read()
         boxes, _ = detecter.detect(frame)
-        if (type(boxes) != None):
+        if (type(boxes) != type(None)):
             cv2.imwrite('./data/{}/{}.png'.format(cam_name, str(number_image)), frame)
             number_image += 1
+        else:
+            print("don't have any box to draw")
 
             # draw_img = draw_boxes(frame, boxes)
 
@@ -57,15 +59,23 @@ def collect_face_images(cam_name):
         if cv2.waitKey(1) == 27:
             break
     
-    dotenv.set_key(dotenv_file, "NUMBER_IMAGE", number_image)
+    dotenv.set_key(dotenv_file, "NUMBER_IMAGE", 20)
     cap.release()
     cv2.destroyAllWindows()
 
+def detect_face(image):
+    detecter = init_detecter()
+    boxes, _ = detecter.detect(image)
+    if (type(boxes) != None):
+        drawed_img = draw_boxes(image, boxes)
+    cv2.imshow("test cam 1", drawed_img)
+
+
 def main():
 
-    collect_face_images("cam_1")
-    collect_face_images("cam_2")
-
+    # collect_face_images("cam_1")
+    img = cv2.imread("cam_1_background.png")
+    detect_face(img)
     
 if __name__ == "__main__":
     main()
