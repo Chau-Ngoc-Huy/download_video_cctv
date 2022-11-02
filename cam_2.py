@@ -52,13 +52,14 @@ def collect_face_images(cam_name):
             if (type(boxes) != type(None)):
                 cv2.imwrite('./data/{}/{}.png'.format(cam_name, str(number_image)), frame)
                 number_image += 1
+                frame_number -= 1
             else:
                 print("don't have any face on image: ", frame_number)
 
             # draw_img = draw_boxes(frame, boxes)
 
         # cv2.imshow('RTSP stream', draw_img)
-        frame += 1
+        frame_number += 1
         if cv2.waitKey(1) == 27:
             break
     
