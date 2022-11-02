@@ -47,12 +47,11 @@ def collect_face_images(cam_name):
 
     while True:
         _, frame = cap.read()
-        if frame_number % 30 == 0:
+        if frame_number % 60 == 0:
             boxes, _ = detecter.detect(frame)
             if (type(boxes) != type(None)):
                 cv2.imwrite('./data/{}/{}.png'.format(cam_name, str(number_image)), frame)
                 number_image += 1
-                frame_number -= 1
             else:
                 print("don't have any face on image")
 
@@ -72,7 +71,7 @@ def detect_face(image):
     boxes, _ = detecter.detect(image)
     if (type(boxes) != None):
         drawed_img = draw_boxes(image, boxes)
-    cv2.imshow("test cam 1", drawed_img)
+    cv2.imshow("test cam", drawed_img)
 
 
 def main():
