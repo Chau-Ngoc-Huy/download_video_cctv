@@ -5,7 +5,12 @@ install:
 	pip install -r requirements.txt
 
 run:
-	python3 main.py
+	python3.10 main.py
+
+push_git:
+	git add .
+	git commit -m "test"
+	git push
 
 clean_image:
 	rm ./data/cam_1/*.png

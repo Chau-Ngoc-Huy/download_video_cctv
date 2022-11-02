@@ -35,6 +35,7 @@ def collect_face_images(cam_name):
     load_dotenv(dotenv_file)
     number_image = int(os.getenv('NUMBER_IMAGE'))
     RTSP_URL = os.getenv('RTSP_URL')
+    print("RTSP_URL: ", RTSP_URL)
 
     cap = cv2.VideoCapture(RTSP_URL, cv2.CAP_FFMPEG)
     detecter = init_detecter()
