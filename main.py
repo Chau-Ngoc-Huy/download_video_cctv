@@ -6,6 +6,7 @@ import torch
 from facenet_pytorch import MTCNN
 from dotenv import load_dotenv
 import dotenv
+import sys
 
 # os.environ['OPENCV_FFMPEG_CAPTURE_OPTIONS'] = 'rtsp_transport;udp'
 
@@ -14,6 +15,14 @@ def init_detecter():
     print('Running on device: {}'.format(device))
     mtcnn = MTCNN(keep_all=True, device=device)
     return mtcnn
+
+def count_file(cam_name):
+
+    dir = "./data/" + cam_name
+    count = 0
+    for path in os.listdir(dir):
+        count += 1
+    return count
 
 def draw_boxes(img, boxes):
     if type(boxes) == type(None):
@@ -33,7 +42,7 @@ def collect_face_images(cam_name):
 
     dotenv_file = "./data/{}/.env".format(cam_name)
     load_dotenv(dotenv_file)
-    number_image = int(os.getenv('NUMBER_IMAGE'))
+    number_image = count_file(cam_name) - 1
     RTSP_URL = os.getenv('RTSP_URL')
     print("RTSP_URL: ", RTSP_URL)
 
@@ -77,7 +86,10 @@ def detect_face(image):
 
 def main():
 
-    collect_face_images("cam_1")
+    cam_name = sys.argv[1]
+    print("running in ", cam_name)
+
+    collect_face_images(cam_name)
     # img = cv2.imread("cam_1_background.png")
     # detect_face(img)
     

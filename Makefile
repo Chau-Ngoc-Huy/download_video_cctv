@@ -4,7 +4,7 @@ install:
 run:
 	python3 main.py
 
-push_git:
+push:
 	git add .
 	git commit -m "test"
 	git push
