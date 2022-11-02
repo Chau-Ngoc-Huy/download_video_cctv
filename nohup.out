@@ -1,0 +1,103 @@
+python3 main.py
+python3: can't open file '/home/mmlab/download_video_cctv/main.py': [Errno 2] No such file or directory
+Makefile:5: recipe for target 'run' failed
+make: *** [run] Error 2
+[W NNPACK.cpp:53] Could not initialize NNPACK! Reason: Unsupported hardware.
+RTSP_URL:  rtsp://view:qwertyUit@192.168.19.168
+Running on device: cpu
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+don't have any face on image
+Traceback (most recent call last):
+  File "/home/mmlab/download_video_cctv/cam_1.py", line 85, in <module>
+    main()
+  File "/home/mmlab/download_video_cctv/cam_1.py", line 80, in main
+    collect_face_images("cam_1")
+  File "/home/mmlab/download_video_cctv/cam_1.py", line 51, in collect_face_images
+    boxes, _ = detecter.detect(frame)
+  File "/home/mmlab/download_video_cctv/env/lib/python3.10/site-packages/facenet_pytorch/models/mtcnn.py", line 313, in detect
+    batch_boxes, batch_points = detect_face(
+  File "/home/mmlab/download_video_cctv/env/lib/python3.10/site-packages/facenet_pytorch/models/utils/detect_face.py", line 73, in detect_face
+    reg, probs = pnet(im_data)
+  File "/home/mmlab/download_video_cctv/env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1190, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/mmlab/download_video_cctv/env/lib/python3.10/site-packages/facenet_pytorch/models/mtcnn.py", line 47, in forward
+    b = self.conv4_2(x)
+  File "/home/mmlab/download_video_cctv/env/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1190, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/mmlab/download_video_cctv/env/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 463, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/home/mmlab/download_video_cctv/env/lib/python3.10/site-packages/torch/nn/modules/conv.py", line 459, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/mmlab/download_video_cctv/cam_2.py", line 6, in <module>
+    from facenet_pytorch import MTCNN
+  File "/home/mmlab/download_video_cctv/env/lib/python3.10/site-packages/facenet_pytorch/__init__.py", line 2, in <module>
+    from .models.mtcnn import MTCNN, PNet, RNet, ONet, prewhiten, fixed_image_standardization
+  File "/home/mmlab/download_video_cctv/env/lib/python3.10/site-packages/facenet_pytorch/models/mtcnn.py", line 6, in <module>
+    from .utils.detect_face import detect_face, extract_face
+  File "/home/mmlab/download_video_cctv/env/lib/python3.10/site-packages/facenet_pytorch/models/utils/detect_face.py", line 3, in <module>
+    from torchvision.transforms import functional as F
+  File "/home/mmlab/download_video_cctv/env/lib/python3.10/site-packages/torchvision/__init__.py", line 5, in <module>
+    from torchvision import datasets, io, models, ops, transforms, utils
+  File "/home/mmlab/download_video_cctv/env/lib/python3.10/site-packages/torchvision/models/__init__.py", line 2, in <module>
+    from .convnext import *
+  File "/home/mmlab/download_video_cctv/env/lib/python3.10/site-packages/torchvision/models/convnext.py", line 209, in <module>
+    class ConvNeXt_Tiny_Weights(WeightsEnum):
+  File "/usr/lib/python3.10/enum.py", line 286, in __new__
+    if not hasattr(enum_member, '_value_'):
+KeyboardInterrupt
