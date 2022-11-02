@@ -37,7 +37,7 @@ def collect_face_images(cam_name):
     RTSP_URL = os.getenv('RTSP_URL')
     print("RTSP_URL: ", RTSP_URL)
 
-    cap = cv2.VideoCapture(RTSP_URL, cv2.CAP_FFMPEG)
+    cap = cv2.VideoCapture(RTSP_URL)
     detecter = init_detecter()
 
     if not cap.isOpened():
