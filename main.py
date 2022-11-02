@@ -62,9 +62,8 @@ def collect_face_images(cam_name):
 
 def main():
 
-    cam_name = 'cam_1'
-
-    collect_face_images(cam_name)
+    collect_face_images("cam_1")
+    collect_face_images("cam_2")
 
     
 if __name__ == "__main__":
