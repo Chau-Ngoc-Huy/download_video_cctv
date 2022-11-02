@@ -5,7 +5,9 @@ from PIL import Image, ImageDraw
 import torch
 from facenet_pytorch import MTCNN
 from dotenv import load_dotenv
+import dotenv
 
+os.environ['OPENCV_FFMPEG_CAPTURE_OPTIONS'] = 'rtsp_transport;udp'
 
 def init_detecter():
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -27,20 +29,15 @@ def draw_boxes(img, boxes):
             cv2.rectangle(img, (x1, y1), (x2, y2), (255, 255, 0), 2)
     return img
 
-def main():
-    RTSP_URL = 'http://127.0.0.1:8080'
-    os.environ['OPENCV_FFMPEG_CAPTURE_OPTIONS'] = 'rtsp_transport;udp'
+def collect_face_images(cam_name):
 
-    load_dotenv()
-    number_image = os.getenv('NUMBER_IMAGE')
+    dotenv_file = "./data/{}/.env".format(cam_name)
+    load_dotenv(dotenv_file)
+    number_image = int(os.getenv('NUMBER_IMAGE'))
+    RTSP_URL = os.getenv('RTSP_URL')
 
-    # from cctv
     cap = cv2.VideoCapture(RTSP_URL, cv2.CAP_FFMPEG)
-    # from local cam
-    # cap = cv2.VideoCapture(0)
-
     detecter = init_detecter()
-
 
     if not cap.isOpened():
         print('Cannot open RTSP stream')
@@ -49,15 +46,26 @@ def main():
     while True:
         _, frame = cap.read()
         boxes, _ = detecter.detect(frame)
+        if (type(boxes) != None):
+            cv2.imwrite('./data/{}/{}.png'.format(cam_name, str(number_image)), frame)
+            number_image += 1
 
-        # frame_draw = draw_boxes(frame, boxes)
+            # draw_img = draw_boxes(frame, boxes)
 
-        # cv2.imshow('RTSP stream', frame_draw)
-
+        # cv2.imshow('RTSP stream', draw_img)
         if cv2.waitKey(1) == 27:
             break
-
+    
+    dotenv.set_key(dotenv_file, "NUMBER_IMAGE", number_image)
     cap.release()
     cv2.destroyAllWindows()
+
+def main():
+
+    cam_name = 'cam_1'
+
+    collect_face_images(cam_name)
+
+    
 if __name__ == "__main__":
     main()
