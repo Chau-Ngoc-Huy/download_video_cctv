@@ -59,7 +59,7 @@ def collect_face_images(cam_name):
             # draw_img = draw_boxes(frame, boxes)
 
         # cv2.imshow('RTSP stream', draw_img)
-        frame += 1
+        frame_number += 1
         if cv2.waitKey(1) == 27:
             break
     
