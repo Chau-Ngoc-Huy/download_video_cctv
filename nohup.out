@@ -101,3 +101,18 @@ Traceback (most recent call last):
   File "/usr/lib/python3.10/enum.py", line 286, in __new__
     if not hasattr(enum_member, '_value_'):
 KeyboardInterrupt
+[W NNPACK.cpp:53] Could not initialize NNPACK! Reason: Unsupported hardware.
+[W NNPACK.cpp:53] Could not initialize NNPACK! Reason: Unsupported hardware.
+running in  cam_1
+RTSP_URL:  rtsp://view:qwertyUit@192.168.19.168
+Running on device: cpu
+Don't have any face on image 0
+Don't have any face on image 30
+Traceback (most recent call last):
+  File "/home/mmlab/download_video_cctv/main.py", line 99, in <module>
+    main()
+  File "/home/mmlab/download_video_cctv/main.py", line 94, in main
+    collect_face_images(cam_name)
+  File "/home/mmlab/download_video_cctv/main.py", line 58, in collect_face_images
+    _, frame = cap.read()
+KeyboardInterrupt
