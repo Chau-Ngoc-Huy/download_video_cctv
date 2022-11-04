@@ -42,7 +42,7 @@ def collect_face_images(cam_name):
 
     dotenv_file = "./data/{}/.env".format(cam_name)
     load_dotenv(dotenv_file)
-    number_image = count_file(cam_name) - 1
+    number_image = (count_file(cam_name) - 1)/2
     RTSP_URL = os.getenv('RTSP_URL')
     print("RTSP_URL: ", RTSP_URL)
 
