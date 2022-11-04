@@ -59,7 +59,9 @@ def collect_face_images(cam_name):
         if frame_number % 30 == 0:
             boxes, _ = detecter.detect(frame)
             if (type(boxes) != type(None)):
+
                 cv2.imwrite('./data/{}/{}.png'.format(cam_name, str(number_image)), frame)
+                cv2.imwrite('./data/{}/{}.box.png'.format(cam_name, str(number_image)), draw_boxes(frame, boxes))\
 
                 print("Saved image [{}] with {} boxes".format(number_image, len(boxes)))
                 number_image += 1
