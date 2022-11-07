@@ -10,11 +10,11 @@ import sys
 
 # os.environ['OPENCV_FFMPEG_CAPTURE_OPTIONS'] = 'rtsp_transport;udp'
 
-def init_detecter():
+def init_detector():
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     print('Running on device: {}'.format(device))
-    mtcnn = MTCNN(keep_all=True, device=device)
-    return mtcnn
+    detector = MTCNN(keep_all=True, device=device)
+    return detector
 
 def count_file(cam_name):
 
@@ -46,8 +46,8 @@ def collect_face_images(cam_name):
     RTSP_URL = os.getenv('RTSP_URL')
     print("RTSP_URL: ", RTSP_URL)
 
-    cap = cv2.VideoCapture(RTSP_URL)
-    detecter = init_detecter()
+    cap = cv2.VideoCapture(0)
+    detector = init_detector()
 
     if not cap.isOpened():
         print('Cannot open RTSP stream')
@@ -56,35 +56,36 @@ def collect_face_images(cam_name):
 
     while True:
         _, frame = cap.read()
+        draw_img = frame
         if frame_number % 30 == 0:
             try:
-                boxes, _ = detecter.detect(frame)
+                boxes, _ = detector.detect(frame)
+
+                if (type(boxes) != type(None)):
+
+                    cv2.imwrite('./data/{}/{}.png'.format(cam_name, str(number_image)), frame)
+                    cv2.imwrite('./data/{}/{}.box.png'.format(cam_name, str(number_image)), draw_boxes(frame, boxes))\
+
+                    print("Saved image [{}] with {} boxes".format(number_image, len(boxes)))
+                    number_image += 1
+                    frame_number -= 1
+                    draw_img = draw_boxes(frame, boxes)
+                else:
+                    print("Don't have any face on image", frame_number)
             except:
                 print("Error: can't detect this frame")
-            if (type(boxes) != type(None)):
+            
 
-                cv2.imwrite('./data/{}/{}.png'.format(cam_name, str(number_image)), frame)
-                cv2.imwrite('./data/{}/{}.box.png'.format(cam_name, str(number_image)), draw_boxes(frame, boxes))\
-
-                print("Saved image [{}] with {} boxes".format(number_image, len(boxes)))
-                number_image += 1
-                frame_number -= 1
-            else:
-                print("Don't have any face on image", frame_number)
-
-            # draw_img = draw_boxes(frame, boxes)
-
-        # cv2.imshow('RTSP stream', draw_img)
+        cv2.imshow('RTSP stream', draw_img)
         frame_number += 1
         if cv2.waitKey(1) == 27:
             break
     
-    dotenv.set_key(dotenv_file, "NUMBER_IMAGE", 20)
     cap.release()
     cv2.destroyAllWindows()
 
 def detect_face(image):
-    detecter = init_detecter()
+    detecter = init_detector()
     boxes, _ = detecter.detect(image)
     if (type(boxes) != None):
         drawed_img = draw_boxes(image, boxes)
