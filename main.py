@@ -10,10 +10,13 @@ import sys
 
 # os.environ['OPENCV_FFMPEG_CAPTURE_OPTIONS'] = 'rtsp_transport;udp'
 
-def init_detector():
-    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-    print('Running on device: {}'.format(device))
-    detector = MTCNN(keep_all=True, device=device)
+def init_detector(type):
+    if type == "mtcnn":
+        device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        print('Running on device: {}'.format(device))
+        detector = MTCNN(keep_all=True, device=device)
+    else: 
+        print("this detector not found")
     return detector
 
 def count_file(cam_name):
@@ -47,7 +50,7 @@ def collect_face_images(cam_name):
     print("RTSP_URL: ", RTSP_URL)
 
     cap = cv2.VideoCapture(0)
-    detector = init_detector()
+    detector = init_detector('mtcnn')
 
     if not cap.isOpened():
         print('Cannot open RTSP stream')
