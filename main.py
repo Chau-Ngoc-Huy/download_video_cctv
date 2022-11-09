@@ -11,6 +11,9 @@ from retinaface import RetinaFace
 
 # os.environ['OPENCV_FFMPEG_CAPTURE_OPTIONS'] = 'rtsp_transport;udp'
 
+RTSP_URL_CAM_1 = "rtsp://view:qwertyUit@192.168.19.168" 
+RTSP_URL_CAM_2 = "rtsp://view:qwertyUit@192.168.19.170" 
+
 
 class Detector:
     def __init__(self, name) -> None:
@@ -36,13 +39,49 @@ class Detector:
                 boxes.append(resp[i]["facial_area"])
                 scores.append(resp[i]["score"])
         return boxes, scores
+def data_dir(type, cam_name):
+    return "data/{}/{}/".format(type, cam_name)
 
+def init_detector(type):
+    if type == "mtcnn":
+        device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        print('Running on device: {}'.format(device))
+        detector = MTCNN(keep_all=True, device=device)
+    elif type == "cascade":
+        detector = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
+    elif type == "retina": 
+        detector = RetinaFace
+    else: 
+        print("this detector not found")
+    return detector
 
+def count_file(dir):
+    count = 0
+    for path in os.listdir(dir):
+        count += 1
+    return count
+
+def draw_boxes(img, boxes):
+    if type(boxes) == type(None):
+        print("don't have any box to draw")
+    else:
+        for box in boxes:
+            box = [int(i) for i in box]
+            [x1, y1, x2, y2] = box
+            cv2.rectangle(img, (x1, y1), (x2, y2), (255, 255, 0), 2)
+    return img
+def get_RTSP_URL(cam_name):
+    if cam_name == "cam_1":
+        RTSP_URL = RTSP_URL_CAM_1
+    elif cam_name == "cam_2":
+        RTSP_URL = RTSP_URL_CAM_2
+
+    return RTSP_URL
 def collect_face_images(cam_name, model):
 
+    
     RTSP_URL = get_RTSP_URL(cam_name)
-
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(RTSP_URL)
     detector = Detector(model)
 
     if not cap.isOpened():
@@ -50,7 +89,7 @@ def collect_face_images(cam_name, model):
         exit(-1)
 
     frame_number = 0
-    number_image = (count_file(cam_name) - 1)/2
+    number_image = int(count_file(data_dir('image', cam_name))/2)
 
     while True:
         _, frame = cap.read()
@@ -62,8 +101,8 @@ def collect_face_images(cam_name, model):
 
                 if (type(boxes) != type(None)):
 
-                    # cv2.imwrite('./data/{}/{}.png'.format(cam_name, str(number_image)), frame)
-                    # cv2.imwrite('./data/{}/{}.box.png'.format(cam_name, str(number_image)), draw_boxes(frame, boxes))
+                    cv2.imwrite(data_dir('image', cam_name) + "{}.png".format(number_image), frame)
+                    cv2.imwrite(data_dir('image', cam_name) + "{}.boxes.png".format(number_image), draw_boxes(frame, boxes))
 
                     print("Saved image [{}] with {} boxes".format(number_image, len(boxes)))
                     number_image += 1
@@ -94,53 +133,50 @@ def detect_face(image, model):
             break
     cv2.destroyAllWindows()
 
+def save_video(cam_name):
+    RTSP_URL = get_RTSP_URL(cam_name)
+    video = cv2.VideoCapture(0)
 
+    if not video.isOpened():
+        print('Cannot open RTSP stream')
+        exit(-1)
+    
+    video_number = count_file(data_dir('video', cam_name))
+    frame_width = int(video.get(3))
+    frame_height = int(video.get(4))
+    size = (frame_width, frame_height)
+
+    while True:
+        frame_count = 0
+        result = cv2.VideoWriter(data_dir('video', cam_name) + '{}.avi'.format(video_number), 
+                            cv2.VideoWriter_fourcc(*'MJPG'),
+                            10, size)
+
+        
+        while(frame_count < 120):
+            ret, frame = video.read()
+        
+            if ret == True: 
+                result.write(frame)
+                frame_count += 1
+            else:
+                break
+        
+        result.release()
+
+        video_number += 1
+        if cv2.waitKey(1) == 27:
+                    break
+    video.release()
 def main():
 
     cam_name = sys.argv[1]
     print("running in ", cam_name)
 
-    collect_face_images(cam_name, 'retina')
+    # collect_face_images(cam_name, 'mtcnn')
     # img = cv2.imread("cam_1_background.png")
     # detect_face(img, 'mtcnn')
+    save_video(cam_name)
     
 if __name__ == "__main__":
     main()
-
-def init_detector(type):
-    if type == "mtcnn":
-        device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        print('Running on device: {}'.format(device))
-        detector = MTCNN(keep_all=True, device=device)
-    elif type == "cascade":
-        detector = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
-    elif type == "retina": 
-        detector = RetinaFace
-    else: 
-        print("this detector not found")
-    return detector
-
-def count_file(cam_name):
-
-    dir = "./data/" + cam_name
-    count = 0
-    for path in os.listdir(dir):
-        count += 1
-    return count
-
-def draw_boxes(img, boxes):
-    if type(boxes) == type(None):
-        print("don't have any box to draw")
-    else:
-        for box in boxes:
-            box = [int(i) for i in box]
-            [x1, y1, x2, y2] = box
-            cv2.rectangle(img, (x1, y1), (x2, y2), (255, 255, 0), 2)
-    return img
-
-def get_RTSP_URL(cam_name):
-    dotenv_file = "./data/{}/.env".format(cam_name)
-    load_dotenv(dotenv_file)
-    RTSP_URL = os.getenv('RTSP_URL')
-    print("RTSP_URL: ", RTSP_URL)
-    return RTSP_URL
