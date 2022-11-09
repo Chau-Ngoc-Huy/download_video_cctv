@@ -135,7 +135,7 @@ def detect_face(image, model):
 
 def save_video(cam_name):
     RTSP_URL = get_RTSP_URL(cam_name)
-    video = cv2.VideoCapture(0)
+    video = cv2.VideoCapture(RTSP_URL)
 
     if not video.isOpened():
         print('Cannot open RTSP stream')
