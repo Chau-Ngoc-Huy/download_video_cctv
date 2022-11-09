@@ -153,7 +153,7 @@ def save_video(cam_name):
                             10, size)
         print('{}.avi'.format(video_number))
         
-        while(frame_count < 120):
+        while(frame_count < 18000):
             ret, frame = video.read()
         
             if ret == True: 
