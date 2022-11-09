@@ -151,7 +151,7 @@ def save_video(cam_name):
         result = cv2.VideoWriter(data_dir('video', cam_name) + '{}.avi'.format(video_number), 
                             cv2.VideoWriter_fourcc(*'MJPG'),
                             10, size)
-
+        print('{}.avi'.format(video_number))
         
         while(frame_count < 120):
             ret, frame = video.read()
